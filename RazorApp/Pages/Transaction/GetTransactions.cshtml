@@ -1,0 +1,108 @@
+@page
+@model RazorApp.Pages.Transaction.GetTransactionsModel
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .category-id {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="btn-container">
+        <a href="/Transaction/CreateTransaction" class="btn btn-primary">Add Transaction</a>
+    </div>
+
+    
+
+    <ul>
+        @foreach (var transaction in Model.Transactions)
+        {
+            <li>
+                <div>
+                    <span class="transaction-id">ID: @transaction.Id</span><br />
+                    <span><strong>From Account Id:</strong> @transaction.FromAccountId</span><br />
+                    <span><strong>To Account Id:</strong> @transaction.ToAccountId</span><br />
+                    <span><strong>Amount:</strong> @transaction.Amount</span><br />
+                    <span><strong>Transaction Date:</strong> @transaction.TransactionDate</span><br />
+                </div>
+                <div class="btn-container">
+                    <a asp-page="/Transaction/UpdateTransaction" asp-route-id="@transaction.Id" class="btn btn-primary">Update</a>
+                    <a href="/Transaction/DeleteTransaction?id=@transaction.Id" class="btn btn-danger">Delete</a>
+                </div>
+            </li>
+        }
+    </ul>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <div class="pagination-container">
+            <nav>
+                <ul class="pagination">
+                    @for (var i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.Filter.PageNumber == i ? "active" : "")">
+                            <a class="page-link" asp-page="./GetTransactions" asp-route-PageNumber="@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    }
+</body>
+</html>
